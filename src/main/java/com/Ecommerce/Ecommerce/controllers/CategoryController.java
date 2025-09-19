@@ -14,8 +14,8 @@ public class CategoryController {
 
     private final CategoryServiceImpl categoryService;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> createCategory(@RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.createCategory(categoryDto));
     }
@@ -24,15 +24,13 @@ public class CategoryController {
     public ResponseEntity<Response> getAllCategories(){
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{categoryId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.updateCategory(categoryId, categoryDto));
     }
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/delete/{categoryId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> deleteCategory(@PathVariable Long categoryId){
         return ResponseEntity.ok(categoryService.deleteCategory(categoryId));
     }

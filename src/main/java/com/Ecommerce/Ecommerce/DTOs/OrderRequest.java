@@ -1,4 +1,5 @@
 package com.Ecommerce.Ecommerce.DTOs;
+import com.Ecommerce.Ecommerce.entity.Payment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -10,5 +11,5 @@ public class OrderRequest {
 
     private BigDecimal totalPrice;
     private List<OrderItemRequest> items;
-//    private Payment paymentInfo;
+    private Payment paymentInfo;
 }

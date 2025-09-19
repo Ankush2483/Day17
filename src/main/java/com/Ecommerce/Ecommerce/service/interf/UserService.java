@@ -12,4 +12,5 @@ public interface UserService {
     Response getAllUsers();
     User getLoginUser();
     Response getUserInfoAndOrderHistory();
+
 }

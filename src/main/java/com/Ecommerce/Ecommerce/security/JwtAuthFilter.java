@@ -21,39 +21,46 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final  CustomUserDetailsService customUserDetailsService;
-
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException, java.io.IOException {
+                                    FilterChain filterChain) throws ServletException,
+            IOException, java.io.IOException {
 
-        String token = getTokenFromRequest(request);
+        String jwt = getTokenFromRequest(request);
+        System.out.println("Inside doFilterInternal");
+        if (jwt!= null) {
+            System.out.println("Token found, attempting to validate...");
+            try {
+                String username = jwtUtils.getUsernameFromToken(jwt);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
-        if (token != null){
-            String username = jwtUtils.getUsernameFromToken(token);
-
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-
-            if (StringUtils.hasText(username) && jwtUtils.isTokenValid(token, userDetails)){
-                log.info("VALID JWT FOR {}", username);
-
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                if (username != null && jwtUtils.isTokenValid(jwt, userDetails) && SecurityContextHolder
+                        .getContext().getAuthentication() == null) {
+                    log.info("VALID JWT FOR {}", username);
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails, null, userDetails.getAuthorities()
+                            );
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource()
+                            .buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            } catch (Exception e) {
+                log.error("JWT token validation failed: {}", e.getMessage());
             }
-
+        } else {
+            System.out.println("No token found in request. Continuing filter chain...");
         }
+
         filterChain.doFilter(request, response);
     }
 
-    private String getTokenFromRequest(HttpServletRequest request){
-        String token = request.getHeader("Authorization");
-        if (StringUtils.hasText(token) && StringUtils.startsWithIgnoreCase(token, "Bearer ")){
-            return token.substring(7);
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
         }
         return null;
     }

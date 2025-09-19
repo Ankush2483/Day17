@@ -2,22 +2,37 @@ package com.Ecommerce.Ecommerce.controllers;
 import com.Ecommerce.Ecommerce.DTOs.LoginRequest;
 import com.Ecommerce.Ecommerce.DTOs.Response;
 import com.Ecommerce.Ecommerce.DTOs.UserDto;
+import com.Ecommerce.Ecommerce.entity.User;
+import com.Ecommerce.Ecommerce.security.JwtUtils;
 import com.Ecommerce.Ecommerce.service.interf.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-@Controller
-public class AuthController {
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-    private UserService userServiceRepo;
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtUtils jwtUtils;
     @PostMapping("/register")
     public ResponseEntity<Response> registerUser(@RequestBody UserDto registrationRequest){
         System.out.println(registrationRequest);
-        return ResponseEntity.ok(userServiceRepo.registerUser(registrationRequest));
+        return ResponseEntity.ok(userService.registerUser(registrationRequest));
     }
+
     @PostMapping("/login")
     public ResponseEntity<Response> loginUser(@RequestBody LoginRequest loginRequest){
-        return ResponseEntity.ok(userServiceRepo.loginUser(loginRequest));
+        return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 }
+
+

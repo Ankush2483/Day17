@@ -2,12 +2,16 @@ package com.Ecommerce.Ecommerce.entity;
 import com.Ecommerce.Ecommerce.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -25,7 +29,7 @@ public class User {
     private String name;
 
     @Column(unique = true)
-    @NotBlank(message = "Email is required")
+    @NotNull(message = "Email is required")
     private String email;
 
     @NotBlank(message = "Password number is required")
@@ -46,5 +50,6 @@ public class User {
 
     @Column(name = "created_at")
     private final LocalDateTime createdAt = LocalDateTime.now();
+
 
 }
