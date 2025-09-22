@@ -5,6 +5,7 @@ import com.Ecommerce.Ecommerce.DTOs.UserDto;
 import com.Ecommerce.Ecommerce.entity.User;
 import com.Ecommerce.Ecommerce.security.JwtUtils;
 import com.Ecommerce.Ecommerce.service.interf.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth APIs")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     @Autowired

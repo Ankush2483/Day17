@@ -2,6 +2,7 @@ package com.Ecommerce.Ecommerce.controllers;
 import com.Ecommerce.Ecommerce.DTOs.CategoryDto;
 import com.Ecommerce.Ecommerce.DTOs.Response;
 import com.Ecommerce.Ecommerce.service.impl.CategoryServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/category")
 @RequiredArgsConstructor
+@Tag(name = "Category APIs")
 public class CategoryController {
 
     private final CategoryServiceImpl categoryService;
