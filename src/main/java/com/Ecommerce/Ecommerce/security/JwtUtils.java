@@ -34,8 +34,6 @@ public class JwtUtils {
                     " Please set a secure key with at least 32 bytes.");
             throw new IllegalArgumentException("Invalid JWT secret key configuration.");
         }
-
-        // Decode the Base64 encoded secret key
         byte[] decodedKey = Base64.getDecoder().decode(secreteJwtString);
         key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "HmacSHA256");
     }
